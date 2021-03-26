@@ -1,4 +1,6 @@
-package cn.coufran.doorgod;
+package cn.coufran.doorgod.decider;
+
+import cn.coufran.doorgod.Decider;
 
 /**
  * @author liuhm8

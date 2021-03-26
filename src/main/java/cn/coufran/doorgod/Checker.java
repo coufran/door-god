@@ -9,8 +9,10 @@ import java.lang.reflect.Method;
  * @since 1.0.0
  */
 public class Checker {
+    private static final String MESSAGE_DEFAULT = "未通过校验";
+
     public static <T> void check(CustomDecider decider) {
-        check(decider, "未通过校验");
+        check(decider, MESSAGE_DEFAULT);
     }
 
     public static <T> void check(CustomDecider decider, String message) {
@@ -18,7 +20,7 @@ public class Checker {
     }
 
     public static <T> void check(T value, Decider decider) {
-        check(value, decider, "未通过校验");
+        check(value, decider, MESSAGE_DEFAULT);
     }
 
     public static <T> void check(T value, Decider decider, String message) {
