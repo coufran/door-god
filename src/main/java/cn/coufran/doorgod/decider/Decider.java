@@ -1,4 +1,4 @@
-package cn.coufran.doorgod;
+package cn.coufran.doorgod.decider;
 
 /**
  * @author liuhm8

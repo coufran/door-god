@@ -1,7 +1,5 @@
 package cn.coufran.doorgod.decider;
 
-import cn.coufran.doorgod.Decider;
-
 /**
  * @author liuhm8
  * @version 1.0.0

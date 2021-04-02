@@ -1,6 +1,7 @@
 package cn.coufran.doorgod;
 
-import cn.coufran.doorgod.annotation.NotNull;
+import cn.coufran.doorgod.annotation.Check;
+import cn.coufran.doorgod.decider.annotation.NotNull;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -55,6 +56,20 @@ public class CheckerTests extends ExceptionTests {
         exceptMessage = "value为空";
         message = run(() -> {
             Checker.check(entity, Entity::getValue, Deciders.notNull());
+        });
+        assertThat(message, is(exceptMessage));
+    }
+
+    @Test
+    public void testEntityDecider() {
+        Entity entity = new Entity();
+
+        String message;
+        String exceptMessage;
+
+        exceptMessage = "value为空";
+        message = run(() -> {
+           Checker.check(entity);
         });
         assertThat(message, is(exceptMessage));
     }
