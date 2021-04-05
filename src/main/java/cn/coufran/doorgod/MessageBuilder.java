@@ -44,6 +44,6 @@ public class MessageBuilder {
 
     private <R> String buildMessage(String fieldName, R value) {
         return messageTemplate.replaceAll("\\$\\{fieldName\\}", fieldName)
-                .replaceAll("\\$\\{value\\}", value.toString());
+                .replaceAll("\\$\\{value\\}", value==null?"null":value.toString());
     }
 }

@@ -52,7 +52,7 @@ public class CheckerTests extends ExceptionTests {
         String message;
         String exceptMessage;
 
-        exceptMessage = "value为空";
+        exceptMessage = "value是空";
         message = run(() -> {
             Checker.check(entity, Entity::getValue, Deciders.notNull());
         });
@@ -66,7 +66,7 @@ public class CheckerTests extends ExceptionTests {
         String message;
         String exceptMessage;
 
-        exceptMessage = "value为空";
+        exceptMessage = "value是空";
         message = run(() -> {
            Checker.check(entity);
         });
