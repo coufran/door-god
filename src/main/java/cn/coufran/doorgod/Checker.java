@@ -1,7 +1,15 @@
 package cn.coufran.doorgod;
 
+import cn.coufran.doorgod.decider.CustomDecider;
+import cn.coufran.doorgod.decider.Decider;
+import cn.coufran.doorgod.reflect.ClassConstruct;
+import cn.coufran.doorgod.reflect.ClassScanner;
+import cn.coufran.doorgod.reflect.MethodConstruct;
+
 import java.lang.invoke.SerializedLambda;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * @author liuhm8
@@ -9,8 +17,13 @@ import java.lang.reflect.Method;
  * @since 1.0.0
  */
 public class Checker {
+    private static final String MESSAGE_DEFAULT = "未通过校验";
+
+    private static ClassScanner classScanner = new ClassScanner();
+    private static CheckExecutor checkExecutor = new CheckExecutor();
+
     public static <T> void check(CustomDecider decider) {
-        check(decider, "未通过校验");
+        check(decider, MESSAGE_DEFAULT);
     }
 
     public static <T> void check(CustomDecider decider, String message) {
@@ -18,7 +31,7 @@ public class Checker {
     }
 
     public static <T> void check(T value, Decider decider) {
-        check(value, decider, "未通过校验");
+        check(value, decider, MESSAGE_DEFAULT);
     }
 
     public static <T> void check(T value, Decider decider, String message) {
@@ -34,5 +47,23 @@ public class Checker {
         String message = messageBuilder.builderMessage(entity, getMethod);
 
         check(value, decider, message);
+    }
+
+    public static <T> void check(T entity) {
+        ClassConstruct classConstruct = classScanner.scan(entity.getClass());
+        List<MethodConstruct> methodConstructs = classConstruct.getMethodConstructs();
+        for(MethodConstruct methodConstruct : methodConstructs) {
+            Method method = methodConstruct.getMethodMeta();
+            Object value;
+            try {
+                value = method.invoke(entity);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new IllegalStateException(e);
+            }
+            List<Class<? extends Decider>> deciders = methodConstruct.getDeciders();
+            for(Class<? extends Decider> decider : deciders) {
+                checkExecutor.execute(value, decider);
+            }
+        }
     }
 }
