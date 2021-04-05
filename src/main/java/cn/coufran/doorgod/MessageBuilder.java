@@ -1,8 +1,8 @@
 package cn.coufran.doorgod;
 
 import java.lang.invoke.SerializedLambda;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.function.Function;
 
 /**
  *
@@ -28,6 +28,21 @@ public class MessageBuilder {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return buildMessageWithMethodName(methodName, value);
+    }
+
+    public <T> String builderMessage(T entity, Method getMethod) {
+        Object value = null;
+        try {
+            value = getMethod.invoke(entity);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        String methodName = getMethod.getName();
+        return buildMessageWithMethodName(methodName, value);
+    }
+
+    private <R> String buildMessageWithMethodName(String methodName, R value) {
         String fieldName = null;
         if(methodName.startsWith("is")) {
             fieldName = methodName.replaceFirst("is", "");
@@ -39,10 +54,10 @@ public class MessageBuilder {
         char[] cs = fieldName.toCharArray();
         cs[0] = (char) (cs[0] - ('A' - 'a'));
         fieldName = new String(cs);
-        return buildMessage(fieldName, value);
+        return buildMessageWithFieldName(fieldName, value);
     }
 
-    private <R> String buildMessage(String fieldName, R value) {
+    private <R> String buildMessageWithFieldName(String fieldName, R value) {
         return messageTemplate.replaceAll("\\$\\{fieldName\\}", fieldName)
                 .replaceAll("\\$\\{value\\}", value==null?"null":value.toString());
     }

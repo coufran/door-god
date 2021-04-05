@@ -62,7 +62,7 @@ public class Checker {
             }
             List<Class<? extends Decider>> deciders = methodConstruct.getDeciders();
             for(Class<? extends Decider> decider : deciders) {
-                checkExecutor.execute(value, decider);
+                checkExecutor.execute(entity, value, decider, method);
             }
         }
     }
