@@ -33,12 +33,12 @@ public class MethodScanner implements Scanner<Method> {
         MethodMeta methodMeta = new MethodMeta(method);
         // 扫描Annotation
         Annotation[] annotations = method.getAnnotations();
-        List<Class<? extends Decider>> deciderClasses = this.parseDecider(annotations);
-        methodMeta.addDeciderClasses(deciderClasses);
+        List<Decider> deciders = this.parseDecider(annotations);
+        methodMeta.addDeciders(deciders);
         // 扫描字段
         Field field = getField(method);
         Decidable fieldDecidable = fieldScanner.scan(field);
-        methodMeta.addDeciderClasses(fieldDecidable.getDeciderClasses());
+        methodMeta.addDeciders(fieldDecidable.getDeciders());
 
         return methodMeta;
     }

@@ -31,8 +31,8 @@ public class ClassScanner implements Scanner<Class<?>> {
         // 构造元数据
         ClassMeta classMeta = new ClassMeta(clazz);
         // 解析Annotation
-        List<Class<? extends Decider>> deciderClasses = this.parseDecider(clazz.getAnnotations());
-        classMeta.addDeciderClasses(deciderClasses);
+        List<Decider> deciderClasses = this.parseDecider(clazz.getAnnotations());
+        classMeta.addDeciders(deciderClasses);
         // 解析方法
         List<MethodMeta> methodMetas = Arrays.stream(clazz.getMethods())
                 .map(methodScanner::scan)

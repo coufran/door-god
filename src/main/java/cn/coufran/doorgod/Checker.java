@@ -6,6 +6,7 @@ import cn.coufran.doorgod.message.*;
 import cn.coufran.doorgod.reflect.ClassMeta;
 import cn.coufran.doorgod.reflect.ClassScanner;
 import cn.coufran.doorgod.reflect.MethodMeta;
+import cn.coufran.doorgod.util.reflect.MethodUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -53,23 +54,15 @@ public class Checker {
         // 扫描类结构
         ClassMeta classMeta = classScanner.scan(entity.getClass());
 
+        // TODO class decide
+
+        // 执行校验
         List<MethodMeta> methodMetas = classMeta.getMethodMetas();
         for(MethodMeta methodMeta : methodMetas) {
             Method method = methodMeta.getMethod();
-            Object value;
-            try {
-                value = method.invoke(entity);
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                throw new IllegalStateException(e);
-            }
-            List<Class<? extends Decider>> deciders = methodMeta.getDeciderClasses();
-            for(Class<? extends Decider> deciderClass : deciders) {
-                Decider decider = null;
-                try {
-                    decider = deciderClass.getConstructor().newInstance();
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                    throw new IllegalStateException(e);
-                }
+            Object value = MethodUtils.invoke(method, entity);
+            List<Decider> deciders = methodMeta.getDeciders();
+            for(Decider decider : deciders) {
                 MessageTemplate messageTemplate = MessageTemplateFactory.createMessageTemplate(decider);
                 Message message = new GetterMethodAndValueTemplateMessage(messageTemplate)
                         .setGetterMethod(method)

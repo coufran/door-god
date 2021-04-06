@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class ClassMeta implements Decidable {
     private Class clazz;
-    private List<Class<? extends Decider>> deciderClasses = new ArrayList<>();
+    private List<Decider> deciders = new ArrayList<>();
     private List<MethodMeta> methodMetas;
 
     public ClassMeta(Class clazz) {
@@ -20,12 +20,12 @@ public class ClassMeta implements Decidable {
     }
 
     @Override
-    public List<Class<? extends Decider>> getDeciderClasses() {
-        return this.deciderClasses;
+    public List<Decider> getDeciders() {
+        return this.deciders;
     }
 
-    public void addDeciderClasses(List<Class<? extends Decider>> deciderClasses) {
-        this.deciderClasses.addAll(deciderClasses);
+    public void addDeciders(List<Decider> deciderClasses) {
+        this.deciders.addAll(deciderClasses);
     }
 
     public List<MethodMeta> getMethodMetas() {

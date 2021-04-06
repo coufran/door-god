@@ -24,12 +24,12 @@ public class FieldScanner implements Scanner<Field> {
     @Override
     public Decidable scan(Field field) {
         Annotation[] annotations = field.getAnnotations();
-        List<Class<? extends Decider>> deciderClasses = this.parseDecider(annotations);
+        List<Decider> deciders = this.parseDecider(annotations);
 
         return new Decidable() {
             @Override
-            public List<Class<? extends Decider>> getDeciderClasses() {
-                return deciderClasses;
+            public List<Decider> getDeciders() {
+                return deciders;
             }
         };
     }

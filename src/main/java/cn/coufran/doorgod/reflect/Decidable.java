@@ -15,6 +15,6 @@ public interface Decidable {
      * 获取决策策略
      * @return 决策策略
      */
-    List<Class<? extends Decider>> getDeciderClasses();
+    List<Decider> getDeciders();
 
 }
