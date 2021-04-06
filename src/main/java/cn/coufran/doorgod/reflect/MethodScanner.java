@@ -17,6 +17,9 @@ public class MethodScanner implements Scanner<Method> {
 
     private FieldScanner fieldScanner = FieldScanner.getInstance();
 
+    private MethodScanner() {
+    }
+
     public static MethodScanner getInstance() {
         return INSTANCE;
     }

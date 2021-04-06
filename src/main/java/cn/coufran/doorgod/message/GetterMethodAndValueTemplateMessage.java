@@ -22,11 +22,11 @@ public class GetterMethodAndValueTemplateMessage extends MethodNameAndValueTempl
 
     /**
      * 构造模版消息
-     * @param template 消息模版，至少包含{@link FieldNameAndValueTemplateMessage#KEY_FIELD$NAME}
+     * @param messageTemplate 消息模版，至少包含{@link FieldNameAndValueTemplateMessage#KEY_FIELD$NAME}
      *                 和{@link FieldNameAndValueTemplateMessage#KEY_VALUE}两个空白
      */
-    public GetterMethodAndValueTemplateMessage(String template) {
-        super(template);
+    public GetterMethodAndValueTemplateMessage(MessageTemplate messageTemplate) {
+        super(messageTemplate);
     }
 
     /**

@@ -12,11 +12,11 @@ public class MethodNameAndValueTemplateMessage extends FieldNameAndValueTemplate
 
     /**
      * 构造模版消息
-     * @param template 消息模版，至少包含{@link FieldNameAndValueTemplateMessage#KEY_FIELD$NAME}
+     * @param messageTemplate 消息模版，至少包含{@link FieldNameAndValueTemplateMessage#KEY_FIELD$NAME}
      *                 和{@link FieldNameAndValueTemplateMessage#KEY_VALUE}两个空白
      */
-    public MethodNameAndValueTemplateMessage(String template) {
-        super(template);
+    public MethodNameAndValueTemplateMessage(MessageTemplate messageTemplate) {
+        super(messageTemplate);
     }
 
     /**

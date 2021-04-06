@@ -19,9 +19,8 @@ import java.util.List;
 public class Checker {
     private static final String MESSAGE_DEFAULT = "未通过校验";
 
+    private static ClassScanner classScanner = ClassScanner.getInstance();
     private static Executor executor = SimpleExecutor.getInstance();
-
-    private static ClassScanner classScanner = new ClassScanner();
 
     public static <T> void check(CustomDecider decider) {
         check(decider, MESSAGE_DEFAULT);
@@ -42,7 +41,7 @@ public class Checker {
     public static <T, R> void check(T entity, SerializableFunction<T, R> getMethod, Decider decider) {
         R value = getMethod.apply(entity);
 
-        String messageTemplate = MessageTemplateFactory.createMessageTemplate(decider);
+        DeciderMessageTemplate messageTemplate = new DeciderMessageTemplate(decider);
         Message message = new GetterFunctionAndValueTemplateMessage(messageTemplate)
                 .setGetterFunction(getMethod)
                 .setValue(value);
@@ -71,7 +70,7 @@ public class Checker {
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                     throw new IllegalStateException(e);
                 }
-                String messageTemplate = MessageTemplateFactory.createMessageTemplate(decider);
+                MessageTemplate messageTemplate = new DeciderMessageTemplate(decider);
                 Message message = new GetterMethodAndValueTemplateMessage(messageTemplate)
                         .setGetterMethod(method)
                         .setValue(value);

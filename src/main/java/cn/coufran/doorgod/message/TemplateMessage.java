@@ -22,16 +22,20 @@ import java.util.Map;
  */
 public class TemplateMessage extends Message {
     /** 消息模版，待替换部分使用${key}指定 */
-    private String template;
+    private MessageTemplate messageTemplate;
     /** 数据 */
     private Map<String, Object> data = new HashMap<>();
 
     /**
      * 通过消息模版构造模版消息，消息模版不得为null
-     * @param template 消息模版
+     * @param messageTemplate 消息模版
      */
-    public TemplateMessage(String template) {
-        this.template = template;
+    public TemplateMessage(MessageTemplate messageTemplate) {
+        this.messageTemplate = messageTemplate;
+    }
+
+    public MessageTemplate getTemplate() {
+        return messageTemplate;
     }
 
     /**
@@ -57,14 +61,8 @@ public class TemplateMessage extends Message {
      * 使用数据替换消息模版中的空白区域，生成最终的消息串
      */
     public String asString() {
-        String message = template;
         Map<String, Object> data = getData();
-        for(Map.Entry<String, Object> entry : data.entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            String valueString = value == null ? "null" : value.toString();
-            message = message.replaceAll("\\$\\{"+key+"\\}", valueString);
-        }
+        String message = getTemplate().buildMessage(data);
         return message;
     }
 }

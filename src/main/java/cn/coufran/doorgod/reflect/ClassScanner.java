@@ -20,6 +20,9 @@ public class ClassScanner implements Scanner<Class<?>> {
 
     private MethodScanner methodScanner = MethodScanner.getInstance();
 
+    private ClassScanner() {
+    }
+
     public static ClassScanner getInstance() {
         return INSTANCE;
     }

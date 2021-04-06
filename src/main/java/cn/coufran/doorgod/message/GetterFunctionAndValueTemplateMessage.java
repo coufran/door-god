@@ -25,11 +25,10 @@ public class GetterFunctionAndValueTemplateMessage extends MethodNameAndValueTem
 
     /**
      * 构造模版消息
-     * @param template 消息模版，至少包含{@link FieldNameAndValueTemplateMessage#KEY_FIELD$NAME}
-     *                 和{@link FieldNameAndValueTemplateMessage#KEY_VALUE}两个空白
+     * @param messageTemplate 消息模版
      */
-    public GetterFunctionAndValueTemplateMessage(String template) {
-        super(template);
+    public GetterFunctionAndValueTemplateMessage(MessageTemplate messageTemplate) {
+        super(messageTemplate);
     }
 
     /**

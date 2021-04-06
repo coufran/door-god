@@ -14,6 +14,9 @@ import java.util.List;
 public class FieldScanner implements Scanner<Field> {
     private static final FieldScanner INSTANCE = new FieldScanner();
 
+    private FieldScanner() {
+    }
+
     public static FieldScanner getInstance() {
         return INSTANCE;
     }
