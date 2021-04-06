@@ -41,7 +41,7 @@ public class Checker {
     public static <T, R> void check(T entity, SerializableFunction<T, R> getMethod, Decider decider) {
         R value = getMethod.apply(entity);
 
-        DeciderMessageTemplate messageTemplate = new DeciderMessageTemplate(decider);
+        MessageTemplate messageTemplate = MessageTemplateFactory.createMessageTemplate(decider);
         Message message = new GetterFunctionAndValueTemplateMessage(messageTemplate)
                 .setGetterFunction(getMethod)
                 .setValue(value);
@@ -70,7 +70,7 @@ public class Checker {
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                     throw new IllegalStateException(e);
                 }
-                MessageTemplate messageTemplate = new DeciderMessageTemplate(decider);
+                MessageTemplate messageTemplate = MessageTemplateFactory.createMessageTemplate(decider);
                 Message message = new GetterMethodAndValueTemplateMessage(messageTemplate)
                         .setGetterMethod(method)
                         .setValue(value);

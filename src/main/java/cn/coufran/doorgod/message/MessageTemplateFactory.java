@@ -14,8 +14,9 @@ public class MessageTemplateFactory {
      * @param decider 决策器
      * @return 消息模版
      */
-    public static String createMessageTemplate(Decider decider) {
+    public static MessageTemplate createMessageTemplate(Decider decider) {
         String fieldNameKey = FieldNameAndValueTemplateMessage.KEY_FIELD$NAME;
-        return String.format("${%s}是空", fieldNameKey);
+        String templateString = String.format("${%s}是空", fieldNameKey);
+        return new StringMessageTemplate(templateString);
     }
 }
