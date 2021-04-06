@@ -1,5 +1,6 @@
 package cn.coufran.doorgod;
 
+import cn.coufran.doorgod.decider.Deciders;
 import cn.coufran.doorgod.decider.annotation.NotNull;
 import org.junit.Test;
 

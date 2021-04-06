@@ -6,26 +6,53 @@ import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Method;
 
 /**
- * @author liuhm8
+ * 使用getter方法和值的模版消息
+ * <p>
+ *     用法如下：
+ *     <pre>
+ * Message message = new GetterFunctionAndValueTemplateMessage("${fieldName}:${value}未通过校验")
+ *                       .setGetterFunction(xxx)
+ *                       .setValue(1);
+ *     </pre>
+ * </p>
+ * @author Coufran
  * @version 1.0.0
  * @since 1.0.0
  */
 public class GetterFunctionAndValueTemplateMessage extends MethodNameAndValueTemplateMessage {
+    /** getter方法 */
     private SerializableFunction getterFunction;
 
+    /**
+     * 构造模版消息
+     * @param template 消息模版，至少包含{@link FieldNameAndValueTemplateMessage#KEY_FIELD$NAME}
+     *                 和{@link FieldNameAndValueTemplateMessage#KEY_VALUE}两个空白
+     */
     public GetterFunctionAndValueTemplateMessage(String template) {
         super(template);
     }
 
+    /**
+     * 设置getter方法
+     * @param getterFunction getter方法
+     * @return 当前对象
+     */
     public <T, R> GetterFunctionAndValueTemplateMessage setGetterFunction(SerializableFunction<T, R> getterFunction) {
         this.getterFunction = getterFunction;
         return this;
     }
 
+    /**
+     * 获取getter方法
+     * @return getter方法
+     */
     public SerializableFunction getGetterFunction() {
         return getterFunction;
     }
 
+    /**
+     * 通过getter方法获取方法名
+     */
     @Override
     public String getMethodName() {
         SerializableFunction getterMethod = getGetterFunction();

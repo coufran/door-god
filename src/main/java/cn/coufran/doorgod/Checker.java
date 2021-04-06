@@ -2,10 +2,7 @@ package cn.coufran.doorgod;
 
 import cn.coufran.doorgod.decider.CustomDecider;
 import cn.coufran.doorgod.decider.Decider;
-import cn.coufran.doorgod.message.GetterFunctionAndValueTemplateMessage;
-import cn.coufran.doorgod.message.GetterMethodAndValueTemplateMessage;
-import cn.coufran.doorgod.message.Message;
-import cn.coufran.doorgod.message.StringMessage;
+import cn.coufran.doorgod.message.*;
 import cn.coufran.doorgod.reflect.ClassConstruct;
 import cn.coufran.doorgod.reflect.ClassScanner;
 import cn.coufran.doorgod.reflect.MethodConstruct;
