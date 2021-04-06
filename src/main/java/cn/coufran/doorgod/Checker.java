@@ -3,9 +3,9 @@ package cn.coufran.doorgod;
 import cn.coufran.doorgod.decider.CustomDecider;
 import cn.coufran.doorgod.decider.Decider;
 import cn.coufran.doorgod.message.*;
-import cn.coufran.doorgod.reflect.ClassConstruct;
+import cn.coufran.doorgod.reflect.ClassMeta;
 import cn.coufran.doorgod.reflect.ClassScanner;
-import cn.coufran.doorgod.reflect.MethodConstruct;
+import cn.coufran.doorgod.reflect.MethodMeta;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -51,23 +51,25 @@ public class Checker {
     }
 
     public static <T> void check(T entity) {
-        ClassConstruct classConstruct = classScanner.scan(entity.getClass());
-        List<MethodConstruct> methodConstructs = classConstruct.getMethodConstructs();
-        for(MethodConstruct methodConstruct : methodConstructs) {
-            Method method = methodConstruct.getMethodMeta();
+        // 扫描类结构
+        ClassMeta classMeta = classScanner.scan(entity.getClass());
+
+        List<MethodMeta> methodMetas = classMeta.getMethodMetas();
+        for(MethodMeta methodMeta : methodMetas) {
+            Method method = methodMeta.getMethod();
             Object value;
             try {
                 value = method.invoke(entity);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new IllegalStateException(e);
             }
-            List<Class<? extends Decider>> deciders = methodConstruct.getDeciders();
+            List<Class<? extends Decider>> deciders = methodMeta.getDeciderClasses();
             for(Class<? extends Decider> deciderClass : deciders) {
                 Decider decider = null;
                 try {
                     decider = deciderClass.getConstructor().newInstance();
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                    e.printStackTrace();
+                    throw new IllegalStateException(e);
                 }
                 String messageTemplate = MessageTemplateFactory.createMessageTemplate(decider);
                 Message message = new GetterMethodAndValueTemplateMessage(messageTemplate)
