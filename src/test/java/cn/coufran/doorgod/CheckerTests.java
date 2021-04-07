@@ -1,6 +1,7 @@
 package cn.coufran.doorgod;
 
 import cn.coufran.doorgod.decider.Deciders;
+import cn.coufran.doorgod.decider.annotation.Min;
 import cn.coufran.doorgod.decider.annotation.NotNull;
 import org.junit.Test;
 
@@ -76,7 +77,9 @@ public class CheckerTests extends ExceptionTests {
 
     public static class Entity {
         @NotNull
-        private String value;
+        private String value = "aaa";
+        @Min(1)
+        private Integer intValue = 0;
 
         public String getValue() {
             return value;
@@ -84,6 +87,14 @@ public class CheckerTests extends ExceptionTests {
 
         public void setValue(String value) {
             this.value = value;
+        }
+
+        public Integer getIntValue() {
+            return intValue;
+        }
+
+        public void setIntValue(Integer intValue) {
+            this.intValue = intValue;
         }
     }
 
