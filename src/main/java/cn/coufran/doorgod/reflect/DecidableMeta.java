@@ -5,16 +5,16 @@ import cn.coufran.doorgod.decider.Decider;
 import java.util.List;
 
 /**
- * 可被决策的结构
+ * 可被决策的结构元数据
  * @author Coufran
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface Decidable {
+public abstract class DecidableMeta {
     /**
-     * 获取决策策略
-     * @return 决策策略
+     * 获取决策器
+     * @return 决策器
      */
-    List<Decider> getDeciders();
+    public abstract List<Decider<?>> getDeciders();
 
 }

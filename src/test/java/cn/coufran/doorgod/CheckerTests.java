@@ -1,14 +1,23 @@
 package cn.coufran.doorgod;
 
 import cn.coufran.doorgod.decider.Deciders;
-import cn.coufran.doorgod.decider.annotation.Min;
 import cn.coufran.doorgod.decider.annotation.NotNull;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+/**
+ * 校验器测试
+ * @author Coufran
+ * @version 1.0.0
+ * @since 1.0.0
+ */
+@SuppressWarnings("all")
 public class CheckerTests extends ExceptionTests {
+    /**
+     * 自定义决策规则测试
+     */
     @Test
     public void testCustomerDecider() {
         String message;
@@ -28,6 +37,9 @@ public class CheckerTests extends ExceptionTests {
         assertThat(message, is(exceptMessage));
     }
 
+    /**
+     * 值校验测试
+     */
     @Test
     public void testSimpleDecider() {
         String message;
@@ -47,9 +59,13 @@ public class CheckerTests extends ExceptionTests {
         assertThat(message, is(exceptMessage));
     }
 
+    /**
+     * 字段校验测试
+     */
     @Test
     public void testFieldDecider() {
         Entity entity = new Entity();
+        entity.setValue(Entity.ILLEGAL_VALUE);
 
         String message;
         String exceptMessage;
@@ -61,9 +77,13 @@ public class CheckerTests extends ExceptionTests {
         assertThat(message, is(exceptMessage));
     }
 
+    /**
+     * 实体校验测试
+     */
     @Test
     public void testEntityDecider() {
         Entity entity = new Entity();
+        entity.setValue(Entity.ILLEGAL_VALUE);
 
         String message;
         String exceptMessage;
@@ -75,11 +95,15 @@ public class CheckerTests extends ExceptionTests {
         assertThat(message, is(exceptMessage));
     }
 
+    /**
+     * 测试实体
+     */
     public static class Entity {
+        private static final String LEGAL_VALUE = "value";
+        private static final String ILLEGAL_VALUE = null;
+
         @NotNull
-        private String value = "aaa";
-        @Min(1)
-        private Integer intValue = 0;
+        private String value = LEGAL_VALUE;
 
         public String getValue() {
             return value;
@@ -87,14 +111,6 @@ public class CheckerTests extends ExceptionTests {
 
         public void setValue(String value) {
             this.value = value;
-        }
-
-        public Integer getIntValue() {
-            return intValue;
-        }
-
-        public void setIntValue(Integer intValue) {
-            this.intValue = intValue;
         }
     }
 
