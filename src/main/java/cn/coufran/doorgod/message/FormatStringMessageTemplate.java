@@ -12,14 +12,14 @@ public class FormatStringMessageTemplate extends StringMessageTemplate {
     /** 模版的模版 */
     private String formatTemplate;
     /** 模版的参数 */
-    private String[] args;
+    private Object[] args;
 
     /**
      * 指定模版的构造方法
      * @param formatTemplate 模版的模版
      * @param args 模版的参数，不需要添加${}，只需要中间的Key值
      */
-    public FormatStringMessageTemplate(String formatTemplate, String... args) {
+    public FormatStringMessageTemplate(String formatTemplate, Object... args) {
         super(null);
         this.formatTemplate = formatTemplate;
         this.args = args;
@@ -30,9 +30,6 @@ public class FormatStringMessageTemplate extends StringMessageTemplate {
      * @return 模版
      */
     public String getTemplate() {
-        for(int i=0; i<args.length; i++) {
-            args[i] = "${" + args[i] + "}";
-        }
         return String.format(formatTemplate, args);
     }
 

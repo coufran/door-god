@@ -47,6 +47,38 @@ public class ComparableDecider<T extends Comparable<T>> implements Decider<T> {
     }
 
     /**
+     * 获取范围下界
+     * @return 范围下界
+     */
+    public T getMin() {
+        return min;
+    }
+
+    /**
+     * 是否左闭
+     * @return 是否左闭
+     */
+    public boolean isIncludeMin() {
+        return includeMin;
+    }
+
+    /**
+     * 获取范围上界
+     * @return 范围上界
+     */
+    public T getMax() {
+        return max;
+    }
+
+    /**
+     * 是否右闭
+     * @return 是否右闭
+     */
+    public boolean isIncludeMax() {
+        return includeMax;
+    }
+
+    /**
      * 设置范围下界
      * @param min 范围下界
      */

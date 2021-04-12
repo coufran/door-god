@@ -47,9 +47,9 @@ public class Checker {
      * 校验某个值
      * @param value 值
      * @param decider 决策器
-     * @param <T> 值类型
+     * @param <V> 值类型
      */
-    public static <T> void check(T value, Decider<T> decider) {
+    public static <V> void check(V value, Decider<V> decider) {
         check(value, decider, MESSAGE_DEFAULT);
     }
 
@@ -58,9 +58,9 @@ public class Checker {
      * @param value 值
      * @param decider 决策器
      * @param message 非法消息
-     * @param <T> 值类型
+     * @param <V> 值类型
      */
-    public static <T> void check(T value, Decider<T> decider, String message) {
+    public static <V> void check(V value, Decider<V> decider, String message) {
         executor.execute(value, decider, new StringMessage(message));
     }
 
@@ -69,11 +69,11 @@ public class Checker {
      * @param entity POJO
      * @param getMethod getter方法
      * @param decider 决策器
-     * @param <T> POJO类型
-     * @param <R> getter方法返回值类型
+     * @param <E> POJO类型
+     * @param <V> getter方法返回值类型
      */
-    public static <T, R> void check(T entity, SerializableFunction<T, R> getMethod, Decider<R> decider) {
-        R value = getMethod.apply(entity);
+    public static <E, V> void check(E entity, SerializableFunction<E, V> getMethod, Decider<V> decider) {
+        V value = getMethod.apply(entity);
 
         MessageTemplate messageTemplate = MessageTemplateFactory.createMessageTemplate(decider);
         Message message = new GetterFunctionAndValueTemplateMessage(messageTemplate)
@@ -86,9 +86,9 @@ public class Checker {
     /**
      * 校验POJO
      * @param entity POJO对象
-     * @param <T> POJO类型
+     * @param <E> POJO类型
      */
-    public static <T> void check(T entity) {
+    public static <E> void check(E entity) {
         // 扫描类结构
         ClassMeta classMeta = classScanner.scan(entity.getClass());
 

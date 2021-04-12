@@ -78,7 +78,7 @@ public class AnnotationTests extends ExceptionTests {
         assertThat(message, nullValue());
 
         // 非法测试
-        exceptMessage = "value:"+PropertyEntity.ILLEGAL_VALUE+"不合法";
+        exceptMessage = "value:"+PropertyEntity.ILLEGAL_VALUE+"需要大于等于1";
         entity.setValue(PropertyEntity.ILLEGAL_VALUE);
         message = run(() -> {
             Checker.check(entity);
