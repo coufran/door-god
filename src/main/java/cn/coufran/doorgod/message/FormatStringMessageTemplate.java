@@ -3,21 +3,26 @@ package cn.coufran.doorgod.message;
 import java.util.Map;
 
 /**
- * 字符串模版，模版中使用${xxx}定义空位
+ * 字符串模版，模版中使用%s定义空位，使用参数指定空位名
  * @author Coufran
  * @version 1.0.0
  * @since 1.0.0
  */
-public class StringMessageTemplate extends MessageTemplate {
-    /** 模版 */
-    private String template;
+public class FormatStringMessageTemplate extends StringMessageTemplate {
+    /** 模版的模版 */
+    private String formatTemplate;
+    /** 模版的参数 */
+    private String[] args;
 
     /**
      * 指定模版的构造方法
-     * @param template 模版
+     * @param formatTemplate 模版的模版
+     * @param args 模版的参数，不需要添加${}，只需要中间的Key值
      */
-    public StringMessageTemplate(String template) {
-        this.template = template;
+    public FormatStringMessageTemplate(String formatTemplate, String... args) {
+        super(null);
+        this.formatTemplate = formatTemplate;
+        this.args = args;
     }
 
     /**
@@ -25,7 +30,10 @@ public class StringMessageTemplate extends MessageTemplate {
      * @return 模版
      */
     public String getTemplate() {
-        return template;
+        for(int i=0; i<args.length; i++) {
+            args[i] = "${" + args[i] + "}";
+        }
+        return String.format(formatTemplate, args);
     }
 
     /**
