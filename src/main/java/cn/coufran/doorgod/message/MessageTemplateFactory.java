@@ -1,8 +1,6 @@
 package cn.coufran.doorgod.message;
 
-import cn.coufran.doorgod.decider.ComparableDecider;
-import cn.coufran.doorgod.decider.Decider;
-import cn.coufran.doorgod.decider.NotNullDecider;
+import cn.coufran.doorgod.decider.*;
 
 /**
  * 消息模版生成器
@@ -25,6 +23,16 @@ public class MessageTemplateFactory {
         } else if(decider instanceof ComparableDecider) {
             ComparableDecider comparableDecider = (ComparableDecider) decider;
             return createMessageTemplate(comparableDecider);
+        } else if(decider instanceof IsNullDecider) {
+            return new FormatStringMessageTemplate("%s不是空", FIELD$NAME);
+        } else if(decider instanceof EqualDecider) {
+            EqualDecider equalDecider = (EqualDecider) decider;
+            Object compareValue = equalDecider.getCompareValue();
+            return new FormatStringMessageTemplate("%s不是%s", FIELD$NAME, compareValue);
+        } else if(decider instanceof NotEqualDecider) {
+            NotEqualDecider notEqualDecider = (NotEqualDecider) decider;
+            Object compareValue = notEqualDecider.getCompareValue();
+            return new FormatStringMessageTemplate("%s是%s", FIELD$NAME, compareValue);
         } else {
             return new FormatStringMessageTemplate("%s:%s不合法", FIELD$NAME, VALUE);
         }
