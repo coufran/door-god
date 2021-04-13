@@ -28,11 +28,11 @@ public class MessageTemplateFactory {
         } else if(decider instanceof EqualDecider) {
             EqualDecider equalDecider = (EqualDecider) decider;
             Object compareValue = equalDecider.getCompareValue();
-            return new FormatStringMessageTemplate("%s不是%s", FIELD$NAME, compareValue);
+            return new FormatStringMessageTemplate("%s:%s不是%s", FIELD$NAME, VALUE, compareValue);
         } else if(decider instanceof NotEqualDecider) {
             NotEqualDecider notEqualDecider = (NotEqualDecider) decider;
             Object compareValue = notEqualDecider.getCompareValue();
-            return new FormatStringMessageTemplate("%s是%s", FIELD$NAME, compareValue);
+            return new FormatStringMessageTemplate("%s:%s是%s", FIELD$NAME, VALUE, compareValue);
         } else {
             return new FormatStringMessageTemplate("%s:%s不合法", FIELD$NAME, VALUE);
         }
@@ -66,7 +66,7 @@ public class MessageTemplateFactory {
             if(includeMin) {
                 formatTemplate = "%s:%s需要大于等于%s";
             } else {
-                formatTemplate = "%s:%s需要大于等于%s";
+                formatTemplate = "%s:%s需要大于%s";
             }
             return new FormatStringMessageTemplate(formatTemplate, FIELD$NAME, VALUE, min);
         }

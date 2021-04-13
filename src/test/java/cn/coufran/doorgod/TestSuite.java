@@ -12,7 +12,9 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         CheckerTests.class,
-        AnnotationTests.class
+        AnnotationTests.class,
+        DecidersTests.class,
+        DecideAnnotationTests.class
 })
 public class TestSuite {
 }
