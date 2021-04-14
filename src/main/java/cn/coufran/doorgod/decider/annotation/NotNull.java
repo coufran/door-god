@@ -16,4 +16,9 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
 @Decide(decideBy = NotNullDecider.class)
 public @interface NotNull {
+    /**
+     * 自定义消息
+     * @return 自定义消息
+     */
+    String message() default "";
 }

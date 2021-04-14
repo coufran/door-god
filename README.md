@@ -183,22 +183,34 @@ Checker.check("xxx", myDecide("xxxx"));
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
 @Decide(decideBy = MyDecider.class) // 定义决策注解，指定决策器
 public @interface MyDecide() {
+    
 }
 ```
 > 注意：决策器需要有无参构造方法
-2. 定义决策参数（可选）
+2. 填充默认方法
 ```java
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
 @Decide(decideBy = MyDecider.class)
 public @interface MyDecide() {
-    @Property("compareValue") // 定义对应的决策器属性名，不定义默认使用方法名，即value
+    // 定义决策消息
+    String message() default "";
+}
+```
+3. 使用``@Property``定义决策参数
+```java
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
+@Decide(decideBy = MyDecider.class)
+public @interface MyDecide() {
+    @Property("compareValue") // 定义对应的决策器属性名，没有参数默认使用方法名，即"value"
     String value() default null;
 }
 ```
 > 注意：决策器需要有对应属性唯一的setter方法
-3. 使用决策注解
+4. 使用决策注解
 ```java
 class Entity {
     @MyDecide("xxx")

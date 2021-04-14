@@ -5,6 +5,7 @@ import cn.coufran.doorgod.decider.Decider;
 import cn.coufran.doorgod.message.*;
 import cn.coufran.doorgod.reflect.ClassMeta;
 import cn.coufran.doorgod.reflect.ClassScanner;
+import cn.coufran.doorgod.reflect.DecideAnnotationMeta;
 import cn.coufran.doorgod.reflect.MethodMeta;
 import cn.coufran.doorgod.reflect.util.MethodUtils;
 
@@ -91,31 +92,6 @@ public class Checker {
     public static <E> void check(E entity) {
         // 扫描类结构
         ClassMeta classMeta = classScanner.scan(entity.getClass());
-
-        // 执行类校验
-        List<Decider<?>> classDeciders = classMeta.getDeciders();
-        String className = classMeta.getClazz().getSimpleName();
-        for (Decider classDecider : classDeciders) {
-            MessageTemplate messageTemplate = MessageTemplateFactory.createMessageTemplate(classDecider);
-            Message message = new FieldNameAndValueTemplateMessage(messageTemplate)
-                    .setFieldName(className)
-                    .setValue(entity);
-            executor.execute(entity, classDecider, message);
-        }
-
-        // 执行方法校验
-        List<MethodMeta> methodMetas = classMeta.getMethodMetas();
-        for(MethodMeta methodMeta : methodMetas) {
-            Method method = methodMeta.getMethod();
-            Object value = MethodUtils.invoke(method, entity);
-            List<Decider<?>> methodDeciders = methodMeta.getDeciders();
-            for(Decider methodDecider : methodDeciders) {
-                MessageTemplate messageTemplate = MessageTemplateFactory.createMessageTemplate(methodDecider);
-                Message message = new GetterMethodAndValueTemplateMessage(messageTemplate)
-                        .setGetterMethod(method)
-                        .setValue(value);
-                executor.execute(value, methodDecider, message);
-            }
-        }
+        classMeta.accept(executor, entity);
     }
 }

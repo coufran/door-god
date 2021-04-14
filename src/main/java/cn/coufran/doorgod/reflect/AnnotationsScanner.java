@@ -3,6 +3,8 @@ package cn.coufran.doorgod.reflect;
 import cn.coufran.doorgod.annotation.Decide;
 import cn.coufran.doorgod.annotation.Property;
 import cn.coufran.doorgod.decider.Decider;
+import cn.coufran.doorgod.message.Message;
+import cn.coufran.doorgod.message.MessageTemplate;
 import cn.coufran.doorgod.reflect.util.ClassUtils;
 import cn.coufran.doorgod.reflect.util.MethodUtils;
 
@@ -42,17 +44,27 @@ public class AnnotationsScanner extends Scanner<Annotation[]> {
      */
     @Override
     public DecidableMeta scan(Annotation[] annotations) {
-        List<Decider<?>> deciders = new ArrayList<>(annotations.length);
+        List<DecideAnnotationMeta> decideAnnotationMetas = new ArrayList<>(annotations.length);
         for(Annotation annotation : annotations) {
-            Decider<?> decider = scan(annotation);
-            if(decider != null) {
-                deciders.add(decider);
+            DecideAnnotationMeta decideAnnotationMeta = scan(annotation);
+            if(decideAnnotationMeta != null) {
+                decideAnnotationMetas.add(decideAnnotationMeta);
             }
         }
         return new DecidableMeta() {
             @Override
-            public List<Decider<?>> getDeciders() {
-                return deciders;
+            public List<DecideAnnotationMeta> getDecideAnnotationMetas() {
+                return decideAnnotationMetas;
+            }
+
+            @Override
+            public Object getValue(Object entity) {
+                return null;
+            }
+
+            @Override
+            public Message getMessage(MessageTemplate messageTemplate, Object value) {
+                return null;
             }
         };
     }
@@ -62,43 +74,45 @@ public class AnnotationsScanner extends Scanner<Annotation[]> {
      * @param annotation 注解，可以不是决策注解
      * @return 决策器，不是决策注解返回null
      */
-    private Decider<?> scan(Annotation annotation) {
+    private DecideAnnotationMeta scan(Annotation annotation) {
         Class<? extends Annotation> annotationClass = annotation.annotationType();
-        // 构造decider
+        // 获取Decide标记注解
         Decide decideAnnotation = annotationClass.getAnnotation(Decide.class);
-        if(decideAnnotation == null) {
+        if(decideAnnotation == null) { // 不是Decide注解，返回null
             return null;
         }
+
+        // 开始构造元数据
+        DecideAnnotationMeta decideAnnotationMeta = new DecideAnnotationMeta();
+        // 获取Decider Class
         Class<? extends Decider> deciderClass = decideAnnotation.decideBy();
-        Decider<?> decider = ClassUtils.newInstance(deciderClass);
-        // 设置decider属性
+        decideAnnotationMeta.setDeciderClass(deciderClass);
+        // 获取属性
         Method[] annotationMethods = annotationClass.getDeclaredMethods();
         for(Method annotationMethod : annotationMethods) {
-            String propertyName = null;
-            // 从Property注解取属性名
             Property methodProperty = annotationMethod.getAnnotation(Property.class);
-            if(methodProperty != null) {
-                propertyName = methodProperty.value();
+            if(methodProperty == null) { // 非决策器参数，跳过
+                continue;
             }
-            // 使用方法名
-            if(propertyName == null) {
+            // 获取属性名
+            String propertyName = methodProperty.value();
+            if("".equals(propertyName)) { // 未设值参数名，使用方法名
                 propertyName = annotationMethod.getName();
             }
-            // 查找setter
-            String setterName = MethodUtils.getSetterNameByPropertyName(propertyName);
-            List<Method> setters = ClassUtils.getMethods(deciderClass, setterName);
-            if(setters.isEmpty()) {
-                throw new ReflectException("找不到setter");
-            }
-            if(setters.size() > 1) {
-                throw new ReflectException("找到多个setter");
-            }
-            Method setter = setters.get(0);
-            // 获取注解值
+            // 获取属性值
             Object propertyValue = MethodUtils.invoke(annotationMethod, annotation);
-            // 设置注解值
-            MethodUtils.invoke(setter, decider, propertyValue);
+            // 设置属性
+            decideAnnotationMeta.addParameter(propertyName, propertyValue);
         }
-        return decider;
+        // 获取注解消息
+        Method messageMethod = ClassUtils.getMethod(annotationClass, "message");
+        if(messageMethod != null) {
+            String message = MethodUtils.invoke(messageMethod, annotation);
+            if(!"".equals(message)) {
+                decideAnnotationMeta.setMessage(message);
+            }
+        }
+
+        return decideAnnotationMeta;
     }
 }

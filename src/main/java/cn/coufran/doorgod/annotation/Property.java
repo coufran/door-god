@@ -17,5 +17,5 @@ public @interface Property {
      * 定义决策器属性名
      * @return 决策器属性名
      */
-    String value();
+    String value() default "";
 }

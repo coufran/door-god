@@ -19,6 +19,8 @@ public class ClassScanner extends Scanner<Class<?>> {
 
     /** 方法扫描器 */
     private MethodScanner methodScanner = MethodScanner.getInstance();
+    /** 注解扫描器 */
+    private AnnotationsScanner annotationsScanner = AnnotationsScanner.getInstance();
 
     /**
      * 隐藏构造方法
@@ -43,8 +45,9 @@ public class ClassScanner extends Scanner<Class<?>> {
         // 构造元数据
         ClassMeta classMeta = new ClassMeta(clazz);
         // 解析Annotation
-        List<Decider<?>> deciderClasses = this.parseDecider(clazz.getAnnotations());
-        classMeta.addDeciders(deciderClasses);
+        List<DecideAnnotationMeta> decideAnnotationMetas
+                = annotationsScanner.scan(clazz.getAnnotations()).getDecideAnnotationMetas();
+        classMeta.addDecideAnnotationMetas(decideAnnotationMetas);
         // 解析方法
         List<MethodMeta> methodMetas = Arrays.stream(clazz.getMethods())
                 .map(methodScanner::scan)

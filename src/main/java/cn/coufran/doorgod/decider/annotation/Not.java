@@ -23,4 +23,10 @@ public @interface Not {
      */
     @Property("compareValue")
     int value();
+
+    /**
+     * 自定义消息
+     * @return 自定义消息
+     */
+    String message() default "";
 }

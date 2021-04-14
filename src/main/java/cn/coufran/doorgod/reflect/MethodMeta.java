@@ -1,6 +1,9 @@
 package cn.coufran.doorgod.reflect;
 
-import cn.coufran.doorgod.decider.Decider;
+import cn.coufran.doorgod.message.GetterMethodAndValueTemplateMessage;
+import cn.coufran.doorgod.message.Message;
+import cn.coufran.doorgod.message.MessageTemplate;
+import cn.coufran.doorgod.reflect.util.MethodUtils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -15,8 +18,8 @@ import java.util.List;
 public class MethodMeta extends DecidableMeta {
     /** 方法 */
     private Method method;
-    /** 决策器 */
-    private List<Decider<?>> deciders = new ArrayList<>();
+    /** 决策注解元数据 */
+    private List<DecideAnnotationMeta> decideAnnotationMetas = new ArrayList<>();
 
     /**
      * 构造方法元数据
@@ -34,20 +37,31 @@ public class MethodMeta extends DecidableMeta {
         return method;
     }
 
-    /**
-     * 获取决策器
-     * @return 决策器
-     */
-    public List<Decider<?>> getDeciders() {
-        return deciders;
+    public List<DecideAnnotationMeta> getDecideAnnotationMetas() {
+        return decideAnnotationMetas;
     }
 
     /**
-     * 添加决策器
-     * @param deciders 决策器
+     * 执行getter方法，获取属性值
      */
-    protected void addDeciders(List<Decider<?>> deciders) {
-        this.deciders.addAll(deciders);
+    @Override
+    public Object getValue(Object entity) {
+        return MethodUtils.invoke(this.getMethod(), entity);
+    }
+
+    @Override
+    public Message getMessage(MessageTemplate messageTemplate, Object value) {
+        return new GetterMethodAndValueTemplateMessage(messageTemplate)
+                .setGetterMethod(this.getMethod())
+                .setValue(value);
+    }
+
+    /**
+     * 添加决策注解元数据
+     * @param decideAnnotationMetas 决策注解元数据
+     */
+    protected void addDecideAnnotationMetas(List<DecideAnnotationMeta> decideAnnotationMetas) {
+        this.decideAnnotationMetas.addAll(decideAnnotationMetas);
     }
 
 }

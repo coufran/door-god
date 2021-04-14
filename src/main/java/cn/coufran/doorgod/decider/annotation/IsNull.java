@@ -16,4 +16,9 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
 @Decide(decideBy = IsNullDecider.class)
 public @interface IsNull {
+    /**
+     * 自定义消息
+     * @return 自定义消息
+     */
+    String message() default "";
 }

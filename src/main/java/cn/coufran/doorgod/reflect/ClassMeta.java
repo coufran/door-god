@@ -1,6 +1,9 @@
 package cn.coufran.doorgod.reflect;
 
-import cn.coufran.doorgod.decider.Decider;
+import cn.coufran.doorgod.Executor;
+import cn.coufran.doorgod.message.FieldNameAndValueTemplateMessage;
+import cn.coufran.doorgod.message.Message;
+import cn.coufran.doorgod.message.MessageTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +17,8 @@ import java.util.List;
 public class ClassMeta extends DecidableMeta {
     /** 类 */
     private Class<?> clazz;
-    /** 类级别的决策器 */
-    private List<Decider<?>> deciders = new ArrayList<>();
+    /** 决策注解元数据 */
+    private List<DecideAnnotationMeta> decideAnnotationMetas = new ArrayList<>();
     /** 方法元数据 */
     private List<MethodMeta> methodMetas;
 
@@ -35,20 +38,40 @@ public class ClassMeta extends DecidableMeta {
         return clazz;
     }
 
-    /**
-     * 获取类级别的决策器
-     */
     @Override
-    public List<Decider<?>> getDeciders() {
-        return this.deciders;
+    public List<DecideAnnotationMeta> getDecideAnnotationMetas() {
+        return this.decideAnnotationMetas;
     }
 
     /**
-     * 添加类级别的决策器
-     * @param deciderClasses 决策器
+     * 决策值就是实体本身
      */
-    protected void addDeciders(List<Decider<?>> deciderClasses) {
-        this.deciders.addAll(deciderClasses);
+    @Override
+    public Object getValue(Object entity) {
+        return entity;
+    }
+
+    @Override
+    public Message getMessage(MessageTemplate messageTemplate, Object value) {
+        return new FieldNameAndValueTemplateMessage(messageTemplate)
+                .setFieldName(this.getClazz().getSimpleName())
+                .setValue(value);
+    }
+
+    @Override
+    public void accept(Executor executor, Object entity) {
+        super.accept(executor, entity);
+        for (MethodMeta methodMeta : this.methodMetas) {
+            methodMeta.accept(executor, entity);
+        }
+    }
+
+    /**
+     * 添加决策注解元数据
+     * @param decideAnnotationMetas 决策注解元数据
+     */
+    protected void addDecideAnnotationMetas(List<DecideAnnotationMeta> decideAnnotationMetas) {
+        this.decideAnnotationMetas.addAll(decideAnnotationMetas);
     }
 
     /**

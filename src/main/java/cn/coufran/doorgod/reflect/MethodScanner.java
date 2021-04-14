@@ -1,6 +1,5 @@
 package cn.coufran.doorgod.reflect;
 
-import cn.coufran.doorgod.decider.Decider;
 import cn.coufran.doorgod.reflect.util.ClassUtils;
 import cn.coufran.doorgod.reflect.util.MethodUtils;
 
@@ -21,6 +20,8 @@ public class MethodScanner extends Scanner<Method> {
 
     /** 属性扫描器 */
     private FieldScanner fieldScanner = FieldScanner.getInstance();
+    /** 注解扫描器 */
+    private AnnotationsScanner annotationsScanner = AnnotationsScanner.getInstance();
 
     /**
      * 隐藏构造方法
@@ -50,14 +51,15 @@ public class MethodScanner extends Scanner<Method> {
         MethodMeta methodMeta = new MethodMeta(method);
         // 扫描Annotation
         Annotation[] annotations = method.getAnnotations();
-        List<Decider<?>> deciders = this.parseDecider(annotations);
-        methodMeta.addDeciders(deciders);
+        List<DecideAnnotationMeta> decideAnnotationMetas
+                = annotationsScanner.scan(annotations).getDecideAnnotationMetas();
+        methodMeta.addDecideAnnotationMetas(decideAnnotationMetas);
         // 扫描字段
         String fieldName = MethodUtils.getFieldNameByGetter(method);
         Field field = ClassUtils.getField(method.getDeclaringClass(), fieldName);
         if(field != null) {
             DecidableMeta fieldDecidable = fieldScanner.scan(field);
-            methodMeta.addDeciders(fieldDecidable.getDeciders());
+            methodMeta.addDecideAnnotationMetas(fieldDecidable.getDecideAnnotationMetas());
         }
 
         return methodMeta;

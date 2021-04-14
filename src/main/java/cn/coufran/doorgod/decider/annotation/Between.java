@@ -21,23 +21,33 @@ public @interface Between {
      * 定义最小边界值
      * @return 边界值
      */
+    @Property
     int min();
 
     /**
      * 定义最大边界值
      * @return 边界值
      */
+    @Property
     int max();
 
     /**
      * 最小值是否合法
      * @return 边界值合法返回true，否则返回false
      */
+    @Property
     boolean includeMin() default true;
 
     /**
      * 最大值是否合法
      * @return 边界值合法返回true，否则返回false
      */
+    @Property
     boolean includeMax() default true;
+
+    /**
+     * 自定义消息
+     * @return 自定义消息
+     */
+    String message() default "";
 }

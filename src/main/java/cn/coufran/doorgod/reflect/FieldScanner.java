@@ -1,10 +1,7 @@
 package cn.coufran.doorgod.reflect;
 
-import cn.coufran.doorgod.decider.Decider;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.List;
 
 /**
  * 属性扫描器
@@ -15,6 +12,9 @@ import java.util.List;
 public class FieldScanner extends Scanner<Field> {
     /** 单例对象 */
     private static final FieldScanner INSTANCE = new FieldScanner();
+
+    /** 注解扫描器 */
+    private AnnotationsScanner annotationsScanner = AnnotationsScanner.getInstance();
 
     /**
      * 隐藏构造方法
@@ -38,13 +38,7 @@ public class FieldScanner extends Scanner<Field> {
     @Override
     public DecidableMeta scan(Field field) {
         Annotation[] annotations = field.getAnnotations();
-        List<Decider<?>> deciders = this.parseDecider(annotations);
-
-        return new DecidableMeta() {
-            @Override
-            public List<Decider<?>> getDeciders() {
-                return deciders;
-            }
-        };
+        DecidableMeta decidableMeta = annotationsScanner.scan(annotations);
+        return decidableMeta;
     }
 }

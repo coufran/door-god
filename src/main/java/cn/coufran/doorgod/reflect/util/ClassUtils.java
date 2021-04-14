@@ -45,4 +45,13 @@ public class ClassUtils {
                 .filter(method -> method.getName().equals(methodName))
                 .collect(Collectors.toList());
     }
+
+    public static Method getMethod(Class<?> clazz, String methodName) {
+        List<Method> methods = getMethods(clazz, methodName);
+        if(methods.isEmpty()) {
+            return null;
+        }
+        return methods.get(0);
+    }
+
 }
