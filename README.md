@@ -84,7 +84,7 @@ check(entity);
 // 指定校验范围
 check(entity, "default");
 ```
-## 使用校验注解定义校验规则
+## 使用决策注解定义校验规则
 1. 普通校验
 
 在待校验的属性或getter方法上添加校验注解，两种方式等价，可同时使用。
@@ -101,6 +101,30 @@ class Entity {
     }
 }
 ```
+## 内置决策器
+| |工厂方法|决策器|备注|
+|---|---|---|---|
+|1|``notNull()``     |``NotNullDecider``   |非空     |
+|2|``isNull()``      |``IsNullDecider``    |空       |
+|3|``greaterThan()`` |``ComparableDecider``|大于     |
+|4|``greaterEqual()``|``ComparableDecider``|大于等于  |
+|5|``lessThan()``    |``ComparableDecider``|小于     |
+|6|``lessEqual()``   |``ComparableDecider``|小于等于  |
+|7|``between()``     |``ComparableDecider``|区间     |
+|8|``is()``          |``EqualDecider``     |相同     |
+|9|``not()``         |``NotEqualDecider``  |不同     |
+
+## 内置决策注解
+| |决策注解|决策器|备注|
+|---|---|---|---|
+|1|``@NotNull``|``NotNullDecider``    |非空|
+|2|``@IsNull`` |``IsNullDecider``     |空 |
+|3|``@Min``    |``ComparableDecider`` |最小|
+|4|``@Max``    |``ComparableDecider`` |最大|
+|5|``@Between``|``ComparableDecider`` |区间|
+|6|``@Is``     |``EqualDecider``      |相同|
+|7|``@Not``    |``NotEqualDecider``   |不同|
+
 ## 自定义决策器
 1. 定义一个类，实现``Decider``接口，重写``decide()``方法。
 ```java
