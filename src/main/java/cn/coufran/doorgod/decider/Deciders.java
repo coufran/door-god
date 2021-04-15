@@ -27,6 +27,7 @@ public class Deciders {
     /**
      * 大于
      * @param value 边界值
+     * @param <V> 边界值类型
      * @return 决策器
      */
     public static <V extends Comparable<V>> Decider<V> greaterThan(V value) {
@@ -36,6 +37,7 @@ public class Deciders {
     /**
      * 大于等于
      * @param value 边界值
+     * @param <V> 边界值类型
      * @return 决策器
      */
     public static <V extends Comparable<V>> Decider<V> greaterEqual(V value) {
@@ -45,6 +47,7 @@ public class Deciders {
     /**
      * 小于
      * @param value 边界值
+     * @param <V> 边界值类型
      * @return 决策器
      */
     public static <V extends Comparable<V>> Decider<V> lessThan(V value) {
@@ -54,6 +57,7 @@ public class Deciders {
     /**
      * 小于等于
      * @param value 边界值
+     * @param <V> 边界值类型
      * @return 决策器
      */
     public static <V extends Comparable<V>> Decider<V> lessEqual(V value) {
@@ -64,6 +68,7 @@ public class Deciders {
      * 范围内
      * @param min 最小值
      * @param max 最大值
+     * @param <V> 边界值类型
      * @return 决策器
      */
     public static <V extends Comparable<V>> Decider<V> between(V min, V max) {
@@ -76,6 +81,7 @@ public class Deciders {
      * @param includeMin 是否包含最小值
      * @param max 最大值
      * @param includeMax 是否包含最大值
+     * @param <V> 边界值类型
      * @return 决策器
      */
     public static <V extends Comparable<V>> Decider<V> between(V min, boolean includeMin, V max, boolean includeMax) {
@@ -85,6 +91,7 @@ public class Deciders {
     /**
      * 相同
      * @param value 比较值
+     * @param <V> 比较值类型
      * @return 决策器
      */
     public static <V> Decider is(V value) {
@@ -94,6 +101,7 @@ public class Deciders {
     /**
      * 不同
      * @param value 比较值
+     * @param <V> 比较值类型
      * @return 决策器
      */
     public static <V> Decider not(V value) {

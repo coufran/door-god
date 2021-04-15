@@ -38,7 +38,7 @@ public class MethodNameAndValueTemplateMessage extends FieldNameAndValueTemplate
     }
 
     /**
-     * 通过getter方法名生成字段名<br/>
+     * 通过getter方法名生成字段名<br>
      * getter需要是标准getter，即方法名以get或is开始的，其后紧跟字段名，使用驼峰风格
      */
     @Override

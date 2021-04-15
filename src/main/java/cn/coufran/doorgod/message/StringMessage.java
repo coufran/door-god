@@ -1,16 +1,13 @@
 package cn.coufran.doorgod.message;
 
 /**
+ * 字符串消息。<br>
+ * 该错误消息是静态消息，不随任何内容变化。
  * <p>
- *     字符串消息。<br/>
- *     该错误消息是静态消息，不随任何内容变化。
- * </p>
- * <p>
- *     用法如下：
- *     <pre>
+ * 用法如下：
+ * <pre>
  * Message message = new StringMessage("error message");
- *     </pre>
- * </p>
+ * </pre>
  * @author Coufran
  * @version 1.0.0
  * @since 1.0.0

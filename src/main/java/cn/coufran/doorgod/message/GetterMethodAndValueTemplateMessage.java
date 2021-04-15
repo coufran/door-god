@@ -5,13 +5,12 @@ import java.lang.reflect.Method;
 /**
  * 使用getter方法和值的模版消息
  * <p>
- *     用法如下：
- *     <pre>
+ * 用法如下：
+ * <pre>
  * Message message = new GetterMethodAndValueTemplateMessage("${fieldName}:${value}未通过校验")
  *                       .setGetterMethod(xxx)
  *                       .setValue(1);
- *     </pre>
- * </p>
+ * </pre>
  * @author Coufran
  * @version 1.0.0
  * @since 1.0.0
@@ -34,7 +33,7 @@ public class GetterMethodAndValueTemplateMessage extends MethodNameAndValueTempl
      * @param getterMethod getter方法
      * @return 当前对象
      */
-    public <T, R> GetterMethodAndValueTemplateMessage setGetterMethod(Method getterMethod) {
+    public GetterMethodAndValueTemplateMessage setGetterMethod(Method getterMethod) {
         this.getterMethod = getterMethod;
         return this;
     }

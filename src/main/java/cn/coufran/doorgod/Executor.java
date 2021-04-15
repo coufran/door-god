@@ -15,6 +15,7 @@ public interface Executor {
      * @param value 待校验的值
      * @param decider 决策器
      * @param message 校验不通过时的错误消息
+     * @param <V> 校验值类型
      */
     <V> void execute(V value, Decider<V> decider, Message message);
 }

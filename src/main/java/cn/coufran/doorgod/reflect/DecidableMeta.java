@@ -29,7 +29,8 @@ public abstract class DecidableMeta {
     /**
      * 获取决策消息
      * @param messageTemplate 消息模版
-     * @return 决策值
+     * @param value 决策值
+     * @return 决策消息
      */
     public abstract Message getMessage(MessageTemplate messageTemplate, Object value);
 

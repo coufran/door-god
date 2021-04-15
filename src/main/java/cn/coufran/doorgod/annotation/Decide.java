@@ -5,7 +5,7 @@ import cn.coufran.doorgod.decider.Decider;
 import java.lang.annotation.*;
 
 /**
- * 定义决策注解，指定决策注解使用的决策器<br/>
+ * 定义决策注解，指定决策注解使用的决策器<br>
  * 决策器必须拥有无参构造方法。
  * @author Coufran
  * @version 1.0.0

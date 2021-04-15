@@ -3,17 +3,14 @@ package cn.coufran.doorgod.message;
 import java.util.Map;
 
 /**
+ * 包含字段名和值的模版消息
  * <p>
- *     包含字段名和值的模版消息
- * </p>
- * <p>
- *     用法如下：
- *     <pre>
+ * 用法如下：
+ * <pre>
  * Message message = new FieldNameAndValueTemplateMessage("${fieldName}:${value}未通过校验")
  *                       .setFieldName("testField")
  *                       .setValue(1);
- *     </pre>
- * </p>
+ * </pre>
  * @author Coufran
  * @version 1.0.0
  * @since 1.0.0

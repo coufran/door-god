@@ -4,18 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 模版消息。<br>
+ * 模版消息可根据数据的不同，生成不同的消息。<br>
+ * 模版中留下若干空白，与数据部分整合，生成最终的消息。
  * <p>
- *     模版消息。<br/>
- *     模版消息可根据数据的不同，生成不同的消息。<br/>
- *     模版中留下若干空白，与数据部分整合，生成最终的消息。
- * </p>
- * <p>
- *     用法如下：
- *     <pre>
+ * 用法如下：
+ * <pre>
  * Message message = new TemplateMessage("我是错误消息，${key}")
  *                       .put("key", "value");
- *     </pre>
- * </p>
+ * </pre>
  * @author Coufran
  * @version 1.0.0
  * @since 1.0.0

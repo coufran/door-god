@@ -3,7 +3,7 @@ package cn.coufran.doorgod.annotation;
 import java.lang.annotation.*;
 
 /**
- * 指定决策注解属性对应的决策器属性<br/>
+ * 指定决策注解属性对应的决策器属性<br>
  * 决策器必须有对应属性名的setter方法
  * @author Coufran
  * @version 1.0.0

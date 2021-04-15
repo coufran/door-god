@@ -8,13 +8,12 @@ import java.lang.reflect.Method;
 /**
  * 使用getter方法和值的模版消息
  * <p>
- *     用法如下：
- *     <pre>
+ * 用法如下：
+ * <pre>
  * Message message = new GetterFunctionAndValueTemplateMessage("${fieldName}:${value}未通过校验")
  *                       .setGetterFunction(xxx)
  *                       .setValue(1);
- *     </pre>
- * </p>
+ * </pre>
  * @author Coufran
  * @version 1.0.0
  * @since 1.0.0
@@ -35,6 +34,8 @@ public class GetterFunctionAndValueTemplateMessage extends MethodNameAndValueTem
      * 设置getter方法
      * @param getterFunction getter方法
      * @return 当前对象
+     * @param <T> 对象类型
+     * @param <R> getter方法返回值类型
      */
     public <T, R> GetterFunctionAndValueTemplateMessage setGetterFunction(SerializableFunction<T, R> getterFunction) {
         this.getterFunction = getterFunction;
