@@ -37,10 +37,15 @@ public abstract class DecidableMeta {
      * 执行决策
      * @param executor 决策器
      * @param entity 待决策的实体
+     * @param group 校验组
      */
-    public void accept(Executor executor, Object entity) {
+    public void accept(Executor executor, Object entity, String group) {
         List<DecideAnnotationMeta> decideAnnotationMetas = this.getDecideAnnotationMetas();
         for (DecideAnnotationMeta decideAnnotationMeta : decideAnnotationMetas) {
+            // 校验组不符，跳过
+            if(!decideAnnotationMeta.containGroup(group)) {
+                continue;
+            }
             // 获取值
             Object value = getValue(entity);
             // 获取决策器
@@ -57,6 +62,4 @@ public abstract class DecidableMeta {
             executor.execute(value, decider, message);
         }
     }
-
-
 }

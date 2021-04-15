@@ -2,6 +2,7 @@ package cn.coufran.doorgod;
 
 import cn.coufran.doorgod.decider.CustomDecider;
 import cn.coufran.doorgod.decider.Decider;
+import cn.coufran.doorgod.group.Groups;
 import cn.coufran.doorgod.message.*;
 import cn.coufran.doorgod.reflect.ClassMeta;
 import cn.coufran.doorgod.reflect.ClassScanner;
@@ -90,8 +91,18 @@ public class Checker {
      * @param <E> POJO类型
      */
     public static <E> void check(E entity) {
+        Checker.check(entity, Groups.DEFAULT);
+    }
+
+    /**
+     * 校验POJO
+     * @param entity POJO对象
+     * @param group 校验组
+     * @param <E> POJO类型
+     */
+    public static <E> void check(E entity, String group) {
         // 扫描类结构
         ClassMeta classMeta = classScanner.scan(entity.getClass());
-        classMeta.accept(executor, entity);
+        classMeta.accept(executor, entity, group);
     }
 }

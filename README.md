@@ -101,6 +101,42 @@ class Entity {
     }
 }
 ```
+2. 指定错误消息的校验
+
+校验注解中，可以使用``message``自定义消息。
+
+示例：
+```java
+class Entity {
+    @NotNull(message = "请输入值")
+    private String value;
+
+    @NotNull(message = "请输入值")
+    public String getValue() {
+        return value;
+    }
+}
+```
+3. 指定校验组的校验
+
+校验注解中，可以使用``group``自定义校验组，在校验时，也会指定校验组，只有相同校验组的校验注解才会生效。
+
+示例：
+```java
+class MyGroups {
+    public static final String TEST = "test";
+}
+
+class Entity {
+    @NotNull(group = MyGroups.TEST)
+    private String value;
+
+    @NotNull(group = {MyGroups.TEST, Groups.DEFAULT})
+    public String getValue() {
+        return value;
+    }
+}
+```
 ## 内置决策器
 | |工厂方法|决策器|备注|
 |---|---|---|---|
@@ -196,6 +232,8 @@ public @interface MyDecide() {
 public @interface MyDecide() {
     // 定义决策消息
     String message() default "";
+    // 定义校验组
+    String[] groups() default Groups.DEFAULT;
 }
 ```
 3. 使用``@Property``定义决策参数

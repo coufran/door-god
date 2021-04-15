@@ -112,7 +112,12 @@ public class AnnotationsScanner extends Scanner<Annotation[]> {
                 decideAnnotationMeta.setMessage(message);
             }
         }
-
+        // 获取决策组
+        Method groupsMethod = ClassUtils.getMethod(annotationClass, "groups");
+        if(groupsMethod != null) {
+            String[] groups = MethodUtils.invoke(groupsMethod, annotation);
+            decideAnnotationMeta.setGroups(groups);
+        }
         return decideAnnotationMeta;
     }
 }

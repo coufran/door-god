@@ -59,10 +59,10 @@ public class ClassMeta extends DecidableMeta {
     }
 
     @Override
-    public void accept(Executor executor, Object entity) {
-        super.accept(executor, entity);
+    public void accept(Executor executor, Object entity, String group) {
+        super.accept(executor, entity, group);
         for (MethodMeta methodMeta : this.methodMetas) {
-            methodMeta.accept(executor, entity);
+            methodMeta.accept(executor, entity, group);
         }
     }
 

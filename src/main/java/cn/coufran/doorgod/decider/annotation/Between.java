@@ -3,6 +3,7 @@ package cn.coufran.doorgod.decider.annotation;
 import cn.coufran.doorgod.annotation.Decide;
 import cn.coufran.doorgod.annotation.Property;
 import cn.coufran.doorgod.decider.ComparableDecider;
+import cn.coufran.doorgod.group.Groups;
 
 import java.lang.annotation.*;
 
@@ -50,4 +51,10 @@ public @interface Between {
      * @return 自定义消息
      */
     String message() default "";
+
+    /**
+     * 校验组
+     * @return 校验组
+     */
+    String[] groups() default Groups.DEFAULT;
 }
