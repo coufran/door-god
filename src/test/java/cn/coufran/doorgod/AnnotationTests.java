@@ -195,4 +195,60 @@ public class AnnotationTests extends ExceptionTests {
         }
     }
 
+    /**
+     * 消息注解测试
+     */
+    @Test
+    public void testListAnnotation() {
+        ListEntity entity = new ListEntity();
+
+        String message;
+        String exceptMessage;
+
+        // 合法测试
+        entity.setValue(ListEntity.LEGAL_VALUE);
+        message = run(() -> {
+            Checker.check(entity);
+        });
+        assertThat(message, nullValue());
+
+        // 非法测试
+        exceptMessage = "not null 1";
+        entity.setValue(SimpleEntity.ILLEGAL_VALUE);
+        message = run(() -> {
+            Checker.check(entity, "1");
+        });
+        assertThat(message, is(exceptMessage));
+
+        // 非法测试
+        exceptMessage = "not null 2";
+        entity.setValue(SimpleEntity.ILLEGAL_VALUE);
+        message = run(() -> {
+            Checker.check(entity, "2");
+        });
+        assertThat(message, is(exceptMessage));
+    }
+
+    /**
+     * 基础注解测试实体
+     */
+    public static class ListEntity {
+        private static final String LEGAL_VALUE = "value";
+        private static final String ILLEGAL_VALUE = null;
+
+        @NotNull.List({
+                @NotNull(message = "not null 1", groups = "1"),
+                @NotNull(message = "not null 2", groups = "2")
+        })
+        private String value;
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+    }
+
 }

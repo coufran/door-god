@@ -87,7 +87,7 @@ check(entity, "default");
 ## 使用决策注解定义校验规则
 1. 普通校验
 
-在待校验的属性或getter方法上添加校验注解，两种方式等价，可同时使用。
+在待校验的属性或getter方法上添加决策注解，两种方式等价，可同时使用。
 
 示例：
 ```java
@@ -103,7 +103,7 @@ class Entity {
 ```
 2. 指定错误消息的校验
 
-校验注解中，可以使用``message``自定义消息。
+决策注解中，可以使用``message``自定义消息。
 
 示例：
 ```java
@@ -119,7 +119,7 @@ class Entity {
 ```
 3. 指定校验组的校验
 
-校验注解中，可以使用``group``自定义校验组，在校验时，也会指定校验组，只有相同校验组的校验注解才会生效。
+决策注解中，可以使用``group``自定义校验组，在校验时，也会指定校验组，只有相同校验组的决策注解才会生效。
 
 示例：
 ```java
@@ -132,6 +132,30 @@ class Entity {
     private String value;
 
     @NotNull(group = {MyGroups.TEST, Groups.DEFAULT})
+    public String getValue() {
+        return value;
+    }
+}
+```
+4. 同时使用多个相同的注解
+
+每个决策注解都有一个内部注解``List``，可以通过该注解标记多个决策注解。
+
+示例：
+
+```java
+class MyGroups {
+    public static final String INPUT = "input";
+    public static final String SCAN = "scan";
+}
+
+class Entity {
+    @NotNull.List({
+            @NotNull(message = "请输入值", groups = MyGroups.INPUT)
+            @NotNull(message = "请扫描值", groups = MyGroups.SCAN)
+    })
+    private String value;
+
     public String getValue() {
         return value;
     }
@@ -248,7 +272,23 @@ public @interface MyDecide() {
 }
 ```
 > 注意：决策器需要有对应属性唯一的setter方法
-4. 使用决策注解
+4. 增加List内部注解
+```java
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
+@Decide(decideBy = MyDecider.class)
+public @interface MyDecide() {
+    @Documented
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
+    @DecideList
+    @interface List {
+        MyDecide[] value();
+    }
+}
+```
+5. 使用决策注解
 ```java
 class Entity {
     @MyDecide("xxx")

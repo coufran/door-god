@@ -1,6 +1,7 @@
 package cn.coufran.doorgod.reflect;
 
 import cn.coufran.doorgod.annotation.Decide;
+import cn.coufran.doorgod.annotation.DecideList;
 import cn.coufran.doorgod.annotation.Property;
 import cn.coufran.doorgod.decider.Decider;
 import cn.coufran.doorgod.message.Message;
@@ -11,7 +12,10 @@ import cn.coufran.doorgod.reflect.util.MethodUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 注解扫描器
@@ -38,23 +42,23 @@ public class AnnotationsScanner extends Scanner<Annotation[]> {
     }
 
     /**
-     * 扫描注解，返回注解对应的决策器
+     * 扫描注解，返回注解对应的决策注解元数据
      * @param annotations 注解，可包含非决策注解，会自动剔除
-     * @return 决策器
+     * @return 决策注解元数据
      */
     @Override
     public DecidableMeta scan(Annotation[] annotations) {
-        List<DecideAnnotationMeta> decideAnnotationMetas = new ArrayList<>(annotations.length);
+        List<DecideAnnotationMeta> allDecideAnnotationMetas = new ArrayList<>(annotations.length);
         for(Annotation annotation : annotations) {
-            DecideAnnotationMeta decideAnnotationMeta = scan(annotation);
-            if(decideAnnotationMeta != null) {
-                decideAnnotationMetas.add(decideAnnotationMeta);
+            List<DecideAnnotationMeta> decideAnnotationMetas = scan(annotation);
+            if(decideAnnotationMetas != null) {
+                allDecideAnnotationMetas.addAll(decideAnnotationMetas);
             }
         }
         return new DecidableMeta() {
             @Override
             public List<DecideAnnotationMeta> getDecideAnnotationMetas() {
-                return decideAnnotationMetas;
+                return allDecideAnnotationMetas;
             }
 
             @Override
@@ -70,18 +74,61 @@ public class AnnotationsScanner extends Scanner<Annotation[]> {
     }
 
     /**
-     * 扫描单个注解，获取决策器
+     * 扫描单个注解，获取决策注解元数据
      * @param annotation 注解，可以不是决策注解
-     * @return 决策器，不是决策注解返回null
+     * @return 决策注解元数据，不是决策注解返回空集合
      */
-    private DecideAnnotationMeta scan(Annotation annotation) {
+    private List<DecideAnnotationMeta> scan(Annotation annotation) {
         Class<? extends Annotation> annotationClass = annotation.annotationType();
-        // 获取Decide标记注解
+        // 如果是DecideList注解
+        DecideList decideListAnnotation = annotationClass.getAnnotation(DecideList.class);
+        if(decideListAnnotation != null) {
+            return this.scanDecideListAnnotation(annotation, annotationClass);
+        }
+        // 如果是Decide注解
         Decide decideAnnotation = annotationClass.getAnnotation(Decide.class);
-        if(decideAnnotation == null) { // 不是Decide注解，返回null
-            return null;
+        if(decideAnnotation != null) { // 不是Decide注解，返回null
+            return Collections.singletonList(
+                    scanDecideAnnotation(annotation, annotationClass, decideAnnotation)
+            );
         }
 
+        return Collections.emptyList();
+
+    }
+
+    /**
+     * 扫描决策List注解，获取决策注解元数据
+     * @param listAnnotation 决策List注解
+     * @param annotationClass 注解类
+     * @return 所有的决策注解元数据
+     */
+    private List<DecideAnnotationMeta> scanDecideListAnnotation(
+            Annotation listAnnotation,
+            Class<? extends Annotation> annotationClass) {
+        // 获取所有标注的Decide注解
+        Method valueMethod = ClassUtils.getMethod(annotationClass, "value");
+        Annotation[] annotations = MethodUtils.invoke(valueMethod, listAnnotation);
+        // 依次扫描
+        List<DecideAnnotationMeta> allDecideAnnotationMetas = new ArrayList<>();
+        for (Annotation annotation : annotations) {
+            List<DecideAnnotationMeta> decideAnnotationMetas = this.scan(annotation);
+            allDecideAnnotationMetas.addAll(decideAnnotationMetas);
+        }
+        return allDecideAnnotationMetas;
+    }
+
+    /**
+     * 扫描决策注解，获取决策注解元数据
+     * @param annotation 决策注解
+     * @param annotationClass Decide注解类对象
+     * @param decideAnnotation Decide注解
+     * @return 策注解元数据
+     */
+    private DecideAnnotationMeta scanDecideAnnotation(
+            Annotation annotation,
+            Class<? extends Annotation> annotationClass,
+            Decide decideAnnotation) {
         // 开始构造元数据
         DecideAnnotationMeta decideAnnotationMeta = new DecideAnnotationMeta();
         // 获取Decider Class
