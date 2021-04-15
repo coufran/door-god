@@ -12,10 +12,8 @@ import cn.coufran.doorgod.reflect.util.MethodUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 注解扫描器
@@ -156,7 +154,7 @@ public class AnnotationsScanner extends Scanner<Annotation[]> {
         if(messageMethod != null) {
             String message = MethodUtils.invoke(messageMethod, annotation);
             if(!"".equals(message)) {
-                decideAnnotationMeta.setMessage(message);
+                decideAnnotationMeta.setMessageTemplate(message);
             }
         }
         // 获取决策组

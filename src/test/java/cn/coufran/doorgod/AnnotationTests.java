@@ -156,6 +156,51 @@ public class AnnotationTests extends ExceptionTests {
      * 消息注解测试
      */
     @Test
+    public void testMessageTemplateAnnotation() {
+        MessageTemplateEntity entity = new MessageTemplateEntity();
+
+        String message;
+        String exceptMessage;
+
+        // 合法测试
+        entity.setValue(SimpleEntity.LEGAL_VALUE);
+        message = run(() -> {
+            Checker.check(entity);
+        });
+        assertThat(message, nullValue());
+
+        // 非法测试
+        exceptMessage = "请输入值value";
+        entity.setValue(SimpleEntity.ILLEGAL_VALUE);
+        message = run(() -> {
+            Checker.check(entity);
+        });
+        assertThat(message, is(exceptMessage));
+    }
+
+    /**
+     * 基础注解测试实体
+     */
+    public static class MessageTemplateEntity {
+        private static final String LEGAL_VALUE = "value";
+        private static final String ILLEGAL_VALUE = null;
+
+        @NotNull(message = "请输入值${fieldName}")
+        private String value;
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+    }
+
+    /**
+     * 消息注解测试
+     */
+    @Test
     public void testGroupAnnotation() {
         GroupEntity entity = new GroupEntity();
         entity.setValue(null);

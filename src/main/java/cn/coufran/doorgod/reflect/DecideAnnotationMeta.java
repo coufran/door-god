@@ -17,8 +17,8 @@ public class DecideAnnotationMeta {
     private Class<? extends Decider> deciderClass;
     /** 决策器参数 */
     private Map<String, Object> properties = new HashMap<>();
-    /** 决策消息 */
-    private String message;
+    /** 决策消息模版 */
+    private String messageTemplate;
     /** 决策组 */
     private String[] groups;
 
@@ -56,19 +56,19 @@ public class DecideAnnotationMeta {
     }
 
     /**
-     * 获取决策消息
-     * @return 决策消息
+     * 获取决策消息模版
+     * @return 决策消息模版
      */
-    public String getMessage() {
-        return message;
+    public String getMessageTemplate() {
+        return messageTemplate;
     }
 
     /**
-     * 设置决策消息
-     * @param message 决策消息
+     * 设置决策消息模版
+     * @param messageTemplate 决策消息模版
      */
-    void setMessage(String message) {
-        this.message = message;
+    void setMessageTemplate(String messageTemplate) {
+        this.messageTemplate = messageTemplate;
     }
 
     /**

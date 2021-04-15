@@ -51,14 +51,14 @@ public abstract class DecidableMeta {
             // 获取决策器
             Decider decider = DeciderBuilder.buildDecider(decideAnnotationMeta);
             // 获取消息
-            String annotationMessage = decideAnnotationMeta.getMessage();
-            Message message;
-            if(annotationMessage == null) { // 没有指定消息
-                MessageTemplate messageTemplate = MessageTemplateFactory.createMessageTemplate(decider);
-                message = getMessage(messageTemplate, value);
-            } else { // 指定了消息
-                message = new StringMessage(annotationMessage);
+            String annotationMessageTemplate = decideAnnotationMeta.getMessageTemplate();
+            MessageTemplate messageTemplate;
+            if(annotationMessageTemplate == null) { // 没有指定消息模版，根据decider获取
+                messageTemplate = MessageTemplateFactory.createMessageTemplate(decider);
+            } else { // 指定了消息模版
+                messageTemplate = new StringMessageTemplate(annotationMessageTemplate);
             }
+            Message message = getMessage(messageTemplate, value);
             executor.execute(value, decider, message);
         }
     }
